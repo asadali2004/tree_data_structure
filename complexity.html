@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time and Space Complexity Analysis for Tree Operations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .nav-breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .tree-type {
+            margin-bottom: 50px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .tree-type-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .characteristics-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .characteristics-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .characteristics-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list li strong {
+            color: #2c3e50;
+        }
+
+        .subtypes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .subtype-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .subtype-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .subtype-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .visual-tree {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .tree-node {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            margin: 5px;
+            font-weight: bold;
+            min-width: 35px;
+            min-height: 35px;
+            line-height: 1.2;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .tree-level {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .tree-level::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: #667eea;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .property-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .property-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .property-name {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .property-value {
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .advantages-disadvantages {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .pros-cons-card {
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid;
+        }
+
+        .advantages-card {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-top-color: #28a745;
+        }
+
+        .disadvantages-card {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-top-color: #dc3545;
+        }
+
+        .pros-cons-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .advantages-card h4 {
+            color: #155724;
+        }
+
+        .disadvantages-card h4 {
+            color: #721c24;
+        }
+
+        .applications-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #ff9800;
+        }
+
+        .applications-section h4 {
+            color: #e65100;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .applications-section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .applications-section li {
+            margin-bottom: 8px;
+        }
+
+        .formula-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .rotation-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .rotation-card {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #9c27b0;
+        }
+
+        .rotation-card h5 {
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+
+        .color-rules {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .color-rules h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .rule-item {
+            background: white;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #e74c3c;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Table specific styles */
+        .complexity-table-container {
+            margin: 30px 0;
+            overflow-x: auto; /* Allows horizontal scrolling on small screens */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+        }
+
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px; /* Ensure table is wide enough for content */
+        }
+
+        .complexity-table thead th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid #5a6fd8;
+        }
+
+        .complexity-table tbody td {
+            padding: 12px 15px;
+            border: 1px solid #e9ecef;
+            vertical-align: top;
+            background-color: #ffffff;
+            font-size: 0.95rem;
+            color: #34495e;
+        }
+
+        .complexity-table tbody tr:nth-child(even) td {
+            background-color: #f8f9fa;
+        }
+
+        .complexity-table tbody tr:hover td {
+            background-color: #eef2fa;
+        }
+
+        .complexity-table td:nth-child(1) { /* Operation Column */
+            font-weight: bold;
+            color: #4a69bd;
+        }
+        .complexity-table td:nth-child(2) { /* Data Structure Column */
+            font-style: italic;
+            color: #555;
+        }
+        .complexity-table td:nth-child(3),
+        .complexity-table td:nth-child(4),
+        .complexity-table td:nth-child(5) { /* Complexity Columns */
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #0a733c;
+        }
+        .complexity-table td:nth-child(4) { /* Worst Case Time */
+            color: #c0392b;
+        }
+        .complexity-table td:nth-child(6) { /* Notes Column */
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .complexity-table-container {
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⏱️ Time and Space Complexity Analysis</h1>
+            <p class="subtitle">Understanding the performance of Tree Operations</p>
+        </div>
+
+        <div class="nav-breadcrumb">
+            <a href="index.html">← Back to Tree Data Structures Hub</a>
+        </div>
+
+        <div class="tree-type">
+            <div class="tree-type-header">VII. Time and Space Complexity Analysis for Tree Operations</div>
+            
+            <div class="definition-box">
+                <p>The performance of tree operations is typically analyzed in terms of <strong>Time Complexity</strong> (how the execution time grows with input size) and <strong>Space Complexity</strong> (how the memory usage grows with input size). For trees, the "input size" is usually represented by N (the number of nodes in the tree) or H (the height of the tree).</p>
+                <p>A key factor influencing complexity in trees, especially binary trees and BSTs, is whether the tree is <strong>balanced</strong> or <strong>skewed (degenerate)</strong>.</p>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">A. Common Operations and Their Complexities</h3>
+            
+            <div class="complexity-table-container">
+                <table class="complexity-table">
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Data Structure</th>
+                            <th>Average Case Time Complexity</th>
+                            <th>Worst Case Time Complexity</th>
+                            <th>Space Complexity (Auxiliary)</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Search</td>
+                            <td>Binary Search Tree (BST)</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(H)</strong> or <strong>O(N)</strong> (recursive)</td>
+                            <td>The height H can be <strong>O(log N)</strong> for balanced trees, but <strong>O(N)</strong> for skewed trees. Iterative search uses <strong>O(1)</strong> space.</td>
+                        </tr>
+                        <tr>
+                            <td>Insertion</td>
+                            <td>Binary Search Tree (BST)</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(H)</strong> or <strong>O(N)</strong> (recursive)</td>
+                            <td>Similar to search, depends on tree height.</td>
+                        </tr>
+                        <tr>
+                            <td>Deletion</td>
+                            <td>Binary Search Tree (BST)</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(H)</strong> or <strong>O(N)</strong> (recursive)</td>
+                            <td>Similar to search and insertion, depends on tree height.</td>
+                        </tr>
+                        <tr>
+                            <td>Search</td>
+                            <td>AVL Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong> (recursive)</td>
+                            <td>Self-balancing guarantees logarithmic time.</td>
+                        </tr>
+                        <tr>
+                            <td>Insertion</td>
+                            <td>AVL Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong> (recursive)</td>
+                            <td>Includes rebalancing (rotations and height updates).</td>
+                        </tr>
+                        <tr>
+                            <td>Deletion</td>
+                            <td>AVL Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong> (recursive)</td>
+                            <td>Includes rebalancing (rotations and height updates).</td>
+                        </tr>
+                        <tr>
+                            <td>Search</td>
+                            <td>Red-Black Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong> (recursive)</td>
+                            <td>Self-balancing guarantees logarithmic time.</td>
+                        </tr>
+                        <tr>
+                            <td>Insertion</td>
+                            <td>Red-Black Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong> (recursive)</td>
+                            <td>Includes recoloring and rotations.</td>
+                        </tr>
+                        <tr>
+                            <td>Deletion</td>
+                            <td>Red-Black Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong> (recursive)</td>
+                            <td>Includes recoloring and rotations.</td>
+                        </tr>
+                        <tr>
+                            <td>Build Heap</td>
+                            <td>Heap (from array)</td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(1)</strong> (in-place)</td>
+                            <td>Building a heap from an unsorted array using heapify takes linear time.</td>
+                        </tr>
+                        <tr>
+                            <td>Insert into Heap</td>
+                            <td>Heap</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(1)</strong></td>
+                            <td>Done by heapify-up (or sift-up).</td>
+                        </tr>
+                        <tr>
+                            <td>Delete Min/Max from Heap</td>
+                            <td>Heap</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(1)</strong></td>
+                            <td>Done by heapify-down (or sift-down).</td>
+                        </tr>
+                        <tr>
+                            <td>Traversal (BFS/Level Order)</td>
+                            <td>Any Binary Tree</td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(W<sub>max</sub>)</strong> or <strong>O(N)</strong></td>
+                            <td>Time: Visits every node once. Space: <strong>O(W<sub>max</sub>)</strong> where W<sub>max</sub> is the maximum width (number of nodes at the widest level), which can be <strong>O(N)</strong> in the worst case (e.g., complete binary tree).</td>
+                        </tr>
+                        <tr>
+                            <td>Traversal (DFS - In/Pre/Post)</td>
+                            <td>Any Binary Tree</td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(H)</strong> or <strong>O(N)</strong> (recursive)</td>
+                            <td>Time: Visits every node once. Space: <strong>O(H)</strong> due to recursion stack, which can be <strong>O(N)</strong> in the worst case (skewed tree). Iterative DFS can also use <strong>O(H)</strong> stack space.</td>
+                        </tr>
+                        <tr>
+                            <td>Search/Insert/Delete</td>
+                            <td>Trie</td>
+                            <td><strong>O(L)</strong></td>
+                            <td><strong>O(L)</strong></td>
+                            <td><strong>O(L &middot; &Sigma;)</strong> or <strong>O(N &middot; &Sigma;)</strong></td>
+                            <td>L is length of key, &Sigma; is alphabet size. Space is for nodes, each potentially having &Sigma; children pointers. Overall <strong>O(TotalCharsInAllWords)</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td>Query/Update Range</td>
+                            <td>Segment Tree</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(N)</strong> (typically 4N)</td>
+                            <td>Logarithmic time for queries and updates over a range. Space is for the tree nodes.</td>
+                        </tr>
+                        <tr>
+                            <td>Query/Update Prefix Sum</td>
+                            <td>Fenwick Tree (BIT)</td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(log N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td>Logarithmic time for prefix sum queries and point updates. Space is for the array.</td>
+                        </tr>
+                        <tr>
+                            <td>LCA (for BST)</td>
+                            <td>Binary Search Tree (BST)</td>
+                            <td><strong>O(H)</strong></td>
+                            <td><strong>O(H)</strong></td>
+                            <td><strong>O(H)</strong> (recursive)</td>
+                            <td>Time complexity is proportional to tree height.</td>
+                        </tr>
+                        <tr>
+                            <td>LCA (for General Binary Tree)</td>
+                            <td>Any Binary Tree</td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(H)</strong> (recursive)</td>
+                            <td>In worst case, may traverse entire tree.</td>
+                        </tr>
+                        <tr>
+                            <td>Build Tree from Traversals</td>
+                            <td>Any Binary Tree</td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(N)</strong></td>
+                            <td><strong>O(H)</strong> (recursive)</td>
+                            <td>Requires iterating through arrays and recursive calls proportional to tree height.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">B. Detailed Explanation of Complexity Factors</h3>
+
+            <div class="characteristics-list">
+                <h4>O(log N) (Logarithmic Time):</h4>
+                <ul>
+                    <li>This is the ideal time complexity for many tree operations (like search, insertion, deletion) in <strong>balanced binary trees</strong> (e.g., AVL trees, Red-Black trees, or randomly built BSTs on average).</li>
+                    <li>It arises because at each step, the search space is roughly halved, similar to a binary search.</li>
+                    <li>The height of a perfectly balanced binary tree is <strong>O(log N)</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="characteristics-list">
+                <h4>O(N) (Linear Time):</h4>
+                <ul>
+                    <li><strong>Worst Case for Unbalanced BSTs:</strong> If a BST becomes completely skewed (like a linked list), its height becomes <strong>O(N)</strong>. In this scenario, search, insertion, and deletion operations degenerate to <strong>O(N)</strong> because you might have to traverse all nodes in a single path.</li>
+                    <li><strong>Traversals:</strong> BFS and DFS (inorder, preorder, postorder) always visit every node exactly once. Therefore, their time complexity is always <strong>O(N)</strong>.</li>
+                    <li><strong>Building a Heap from Array:</strong> While individual heap operations are <strong>O(log N)</strong>, building an entire heap from an array using heapify takes <strong>O(N)</strong> time.</li>
+                </ul>
+            </div>
+
+            <div class="characteristics-list">
+                <h4>O(H) (Proportional to Height):</h4>
+                <ul>
+                    <li>Many recursive tree operations have a space complexity proportional to the height of the tree due to the recursion call stack.</li>
+                    <li>For a balanced tree, H=<strong>O(log N)</strong>, so space is <strong>O(log N)</strong>.</li>
+                    <li>For a skewed tree, H=<strong>O(N)</strong>, so space is <strong>O(N)</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="characteristics-list">
+                <h4>O(1) (Constant Time):</h4>
+                <ul>
+                    <li>Some specific tree operations might take constant time, such as retrieving the root node, or simple operations within heapify (after the logarithmic traversal part). Auxiliary space for iterative search in a BST is <strong>O(1)</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="characteristics-list">
+                <h4>O(L) (Proportional to Key Length):</h4>
+                <ul>
+                    <li>For Tries, operations like search, insert, and delete depend on the length of the key L, not directly on the total number of words N, making them very fast for long keys but small alphabet size.</li>
+                </ul>
+            </div>
+
+            <div class="characteristics-list">
+                <h4>Space Complexity - Auxiliary Space:</h4>
+                <ul>
+                    <li><strong>Recursion Stack:</strong> Recursive implementations of traversals, search, insert, delete often use stack space proportional to the height of the tree (<strong>O(H)</strong>).</li>
+                    <li><strong>Queue for BFS:</strong> BFS uses a queue. In the worst case (a complete binary tree), the queue might hold up to half the nodes in the last level, making space complexity <strong>O(N)</strong> or more precisely <strong>O(W<sub>max</sub>)</strong>, where W<sub>max</sub> is the maximum width of the tree.</li>
+                    <li><strong>Explicit Stack for Iterative DFS:</strong> Similar to recursion stack, <strong>O(H)</strong>.</li>
+                    <li><strong>Heap:</strong> For array-based heaps, the auxiliary space is <strong>O(1)</strong> if built in-place.</li>
+                    <li><strong>Segment/Fenwick Trees:</strong> Require <strong>O(N)</strong> space for their underlying array structure.</li>
+                </ul>
+            </div>
+
+            <div class="definition-box">
+                <p>Understanding these complexities helps in choosing the right tree data structure for a given problem and anticipating its performance characteristics. For instance, if worst-case logarithmic performance is critical, a self-balancing BST (AVL or Red-Black tree) is preferred over a basic BST.</p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to Main Hub</a>
+    </div>
+
+    <script>
+        // Add smooth scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.subtype-card, .property-card, .tree-type');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateY(20px)';
+                        entry.target.style.transition = 'all 0.6s ease';
+                        
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+
+            // Interactive tree nodes (if any on this page)
+            const treeNodes = document.querySelectorAll('.tree-node');
+            treeNodes.forEach(node => {
+                node.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                node.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

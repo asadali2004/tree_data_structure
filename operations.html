@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Tree Operations - Binary Search Trees</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .nav-breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .tree-type {
+            margin-bottom: 50px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .tree-type-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .characteristics-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .characteristics-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .characteristics-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list li strong {
+            color: #2c3e50;
+        }
+
+        .subtypes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .subtype-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .subtype-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .subtype-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* New styles for code blocks */
+        .code-container {
+            background: #2c3e50; /* Dark background for the whole block */
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Ensures border-radius applies to children */
+        }
+
+        .code-header {
+            background: #34495e; /* Slightly lighter header for the code block */
+            color: #ecf0f1;
+            padding: 10px 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid #495e72;
+            display: flex;
+            align-items: center;
+        }
+
+        .code-header::before {
+            content: '💻'; /* Add a small icon */
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .code-block {
+            color: #ecf0f1;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre-wrap; /* Ensures long lines wrap */
+            word-wrap: break-word; /* Ensures very long words break */
+        }
+
+        /* Syntax Highlighting */
+        .code-block .keyword {
+            color: #8be9fd; /* Light blue for keywords */
+            font-weight: bold;
+        }
+
+        .code-block .method {
+            color: #f1fa8c; /* Yellow for method/class names */
+        }
+
+        .code-block .comment {
+            color: #6272a4; /* Grey for comments */
+        }
+
+        .code-block .string {
+            color: #f1fa8c; /* Green for strings */
+        }
+
+        .code-block .number {
+            color: #bd93f9; /* Purple for numbers */
+        }
+        /* End new styles for code blocks */
+
+
+        .visual-tree {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .tree-node {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            margin: 5px;
+            font-weight: bold;
+            min-width: 35px;
+            min-height: 35px;
+            line-height: 1.2;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .tree-level {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .tree-level::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: #667eea;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .property-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .property-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .property-name {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .property-value {
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .advantages-disadvantages {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .pros-cons-card {
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid;
+        }
+
+        .advantages-card {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-top-color: #28a745;
+        }
+
+        .disadvantages-card {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-top-color: #dc3545;
+        }
+
+        .pros-cons-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .advantages-card h4 {
+            color: #155724;
+        }
+
+        .disadvantages-card h4 {
+            color: #721c24;
+        }
+
+        .applications-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #ff9800;
+        }
+
+        .applications-section h4 {
+            color: #e65100;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .applications-section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .applications-section li {
+            margin-bottom: 8px;
+        }
+
+        .formula-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .rotation-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .rotation-card {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #9c27b0;
+        }
+
+        .rotation-card h5 {
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+
+        .color-rules {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .color-rules h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .rule-item {
+            background: white;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #e74c3c;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .subtypes-grid,
+            .properties-grid,
+            .advantages-disadvantages {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌳 Basic Tree Operations</h1>
+            <p class="subtitle">Focus on Binary Search Trees (BSTs)</p>
+        </div>
+
+        <div class="nav-breadcrumb">
+            <a href="index.html">← Back to Tree Data Structures Hub</a>
+        </div>
+
+        <div class="tree-type">
+            <div class="tree-type-header">IV. Basic Tree Operations (Focus on Binary Search Trees)</div>
+            
+            <div class="definition-box">
+                <p><strong>Binary Search Trees (BSTs) are widely used</strong> because they allow for efficient searching, insertion, and deletion of elements while maintaining sorted data. The efficiency of these operations largely depends on the height of the tree.</p>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">A. Node Structure Definition</h3>
+            <div class="definition-box">
+                <p>A node in a Binary Search Tree will typically contain:</p>
+                <ul>
+                    <li><code>data</code> (or <code>value</code> or <code>key</code>): The actual data stored in the node.</li>
+                    <li><code>left</code>: A reference (or pointer) to its left child node.</li>
+                    <li><code>right</code>: A reference (or pointer) to its right child node.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <div class="code-header">📋 BSTNode Class Definition (Java)</div>
+                <div class="code-block"><span class="keyword">class</span> <span class="method">BSTNode</span> {
+    <span class="keyword">int</span> data;
+    <span class="method">BSTNode</span> left;
+    <span class="method">BSTNode</span> right;
+
+    <span class="keyword">public</span> <span class="method">BSTNode</span>(<span class="keyword">int</span> data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.left = <span class="keyword">null</span>;
+        <span class="keyword">this</span>.right = <span class="keyword">null</span>;
+    }
+}</div>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">B. Insertion</h3>
+            <div class="definition-box">
+                <p>Inserting a new node into a BST involves finding the correct position for the new value while maintaining the BST properties.</p>
+            </div>
+            <div class="characteristics-list">
+                <h4>Algorithm (Recursive):</h4>
+                <ul>
+                    <li>If the tree (or current subtree) is empty, the new node becomes the root of that subtree.</li>
+                    <li>Otherwise, start from the current node.</li>
+                    <li>If the new value is less than the current node's value, recursively insert into the left subtree.</li>
+                    <li>If the new value is greater than the current node's value, recursively insert into the right subtree.</li>
+                    <li>(Optional: If duplicate values are allowed, handle them based on requirements, typically by placing them in the right subtree or ignoring them).</li>
+                    <li>Return the (possibly updated) root of the current subtree.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <div class="code-header">🔄 BST Insertion Implementation (Java)</div>
+                <div class="code-block"><span class="keyword">public class</span> <span class="method">BinarySearchTree</span> {
+
+    <span class="keyword">public</span> <span class="method">BSTNode</span> <span class="method">insert</span>(<span class="method">BSTNode</span> root, <span class="keyword">int</span> data) {
+        <span class="comment">// If the tree is empty, the new node becomes the root</span>
+        <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+            <span class="keyword">return new</span> <span class="method">BSTNode</span>(data);
+        }
+
+        <span class="comment">// Otherwise, traverse the tree to find the correct insertion spot</span>
+        <span class="keyword">if</span> (data < root.data) { <span class="comment">// If new data is less, go left </span>
+            root.left = <span class="method">insert</span>(root.left, data);
+        } <span class="keyword">else if</span> (data > root.data) { <span class="comment">// If new data is greater, go right </span>
+            root.right = <span class="method">insert</span>(root.right, data);
+        }
+        <span class="comment">// If data is equal, we usually do nothing (or handle duplicates based on requirements) </span>
+        <span class="keyword">return</span> root;
+    }
+
+    <span class="comment">// Helper to print BST in-order to verify insertion</span>
+    <span class="keyword">public void</span> <span class="method">inorderPrint</span>(<span class="method">BSTNode</span> root) {
+        <span class="keyword">if</span> (root != <span class="keyword">null</span>) {
+            <span class="method">inorderPrint</span>(root.left);
+            System.out.print(root.data + <span class="string">" "</span>);
+            <span class="method">inorderPrint</span>(root.right);
+        }
+    }
+
+    <span class="comment">// --- Example Usage (main method for testing) ---</span>
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="method">BinarySearchTree</span> bst = <span class="keyword">new</span> <span class="method">BinarySearchTree</span>();
+        <span class="method">BSTNode</span> bstRoot = <span class="keyword">null</span>;
+
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">50</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">30</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">20</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">40</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">70</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">60</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">80</span>);
+
+        System.out.println(<span class="string">"BST after insertions (Inorder Traversal):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Expected: 20 30 40 50 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+    }
+}</div>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">C. Deletion</h3>
+            <div class="definition-box">
+                <p>Deleting a node from a BST is the most complex basic operation because it has three main cases, depending on how many children the node to be deleted has. The goal is to remove the node while preserving the BST properties.</p>
+            </div>
+            <div class="characteristics-list">
+                <h4>Algorithm (Recursive):</h4>
+                <ul>
+                    <li><strong>Find the node to be deleted:</strong> Traverse the tree just like searching.</li>
+                    <li><strong>Case 1: Node has no children (Leaf node):</strong> Simply remove the node (set its parent's child pointer to null).</li>
+                    <li><strong>Case 2: Node has one child:</strong> Replace the node with its only child. The child takes the node's place, effectively bypassing the deleted node.</li>
+                    <li><strong>Case 3: Node has two children:</strong>
+                        <ul>
+                            <li>Find the inorder successor (the smallest node in its right subtree) or the inorder predecessor (the largest node in its left subtree).</li>
+                            <li>Copy the data of the inorder successor (or predecessor) to the node that is to be deleted.</li>
+                            <li>Recursively delete the inorder successor (or predecessor) from its original position. This recursive deletion will fall into Case 1 or Case 2, making it simpler.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <div class="code-header">🗑️ BST Deletion Implementation</div>
+                <div class="code-block">    <span class="comment">// Helper function to find the minimum value node in a BST subtree</span>
+    <span class="keyword">private</span> <span class="method">BSTNode</span> <span class="method">findMinNode</span>(<span class="method">BSTNode</span> node) {
+        <span class="method">BSTNode</span> current = node;
+        <span class="keyword">while</span> (current.left != <span class="keyword">null</span>) {
+            current = current.left;
+        }
+        <span class="keyword">return</span> current;
+    }
+
+    <span class="keyword">public</span> <span class="method">BSTNode</span> <span class="method">delete</span>(<span class="method">BSTNode</span> root, <span class="keyword">int</span> key) {
+        <span class="comment">// 1. Base Case: If the tree is empty or key not found</span>
+        <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+            <span class="keyword">return</span> root;
+        }
+
+        <span class="comment">// 2. Traverse to find the node to be deleted</span>
+        <span class="keyword">if</span> (key < root.data) {
+            root.left = <span class="method">delete</span>(root.left, key);
+        } <span class="keyword">else if</span> (key > root.data) {
+            root.right = <span class="method">delete</span>(root.right, key);
+        } <span class="keyword">else</span> { <span class="comment">// Key is found: root.data == key</span>
+            <span class="comment">// Case 1: Node has no child or only one child</span>
+            <span class="keyword">if</span> (root.left == <span class="keyword">null</span>) {
+                <span class="keyword">return</span> root.right; <span class="comment">// Return the single child (or null if no child)</span>
+            } <span class="keyword">else if</span> (root.right == <span class="keyword">null</span>) {
+                <span class="keyword">return</span> root.left; <span class="comment">// Return the single child</span>
+            }
+
+            <span class="comment">// Case 3: Node has two children</span>
+            <span class="comment">// Find the inorder successor (smallest in the right subtree)</span>
+            <span class="method">BSTNode</span> temp = <span class="method">findMinNode</span>(root.right);
+
+            <span class="comment">// Copy the inorder successor's data to this node</span>
+            root.data = temp.data;
+
+            <span class="comment">// Delete the inorder successor from its original position</span>
+            root.right = <span class="method">delete</span>(root.right, temp.data);
+        }
+        <span class="keyword">return</span> root;
+    }
+
+    <span class="comment">// --- Example Usage (main method for testing) ---</span>
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="method">BinarySearchTree</span> bst = <span class="keyword">new</span> <span class="method">BinarySearchTree</span>();
+        <span class="method">BSTNode</span> bstRoot = <span class="keyword">null</span>;
+
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">50</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">30</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">70</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">20</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">40</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">60</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">80</span>);
+        bstRoot = bst.<span class="method">insert</span>(bstRoot, <span class="number">25</span>); <span class="comment">// 25 is right child of 20</span>
+
+        System.out.println(<span class="string">"BST before deletion (Inorder):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Expected: 20 25 30 40 50 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+
+        <span class="comment">// Delete a leaf node (25)</span>
+        bstRoot = bst.<span class="method">delete</span>(bstRoot, <span class="number">25</span>);
+        System.out.println(<span class="string">"BST after deleting 25 (Inorder):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Expected: 20 30 40 50 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+
+        <span class="comment">// Delete a node with one child (20)</span>
+        bstRoot = bst.<span class="method">delete</span>(bstRoot, <span class="number">20</span>);
+        System.out.println(<span class="string">"BST after deleting 20 (Inorder):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Expected: 30 40 50 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+
+        <span class="comment">// Delete a node with two children (30)</span>
+        bstRoot = bst.<span class="method">delete</span>(bstRoot, <span class="number">30</span>);
+        System.out.println(<span class="string">"BST after deleting 30 (Inorder):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Expected: 40 50 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+
+        <span class="comment">// Delete root node (50) - which has two children</span>
+        System.out.println(<span class="string">"BST before deleting root 50 (Inorder):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Current: 40 50 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+        bstRoot = bst.<span class="method">delete</span>(bstRoot, <span class="number">50</span>);
+        System.out.println(<span class="string">"BST after deleting root 50 (Inorder):"</span>);
+        bst.<span class="method">inorderPrint</span>(bstRoot); <span class="comment">// Expected: 40 60 70 80</span>
+        System.out.println(<span class="string">"\n"</span>);
+    }</div>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">D. Search</h3>
+            <div class="definition-box">
+                <p>Searching for a specific value in a BST is very efficient. Since the tree is ordered, you simply compare the target value with the current node's value and decide whether to go left or right.</p>
+            </div>
+            <div class="characteristics-list">
+                <h4>Algorithm (Recursive):</h4>
+                <ul>
+                    <li>If the root is <code>null</code> or <code>root.data</code> is the key, return root (found or not found).</li>
+                    <li>If <code>key < root.data</code>, recursively search in the left subtree.</li>
+                    <li>If <code>key > root.data</code>, recursively search in the right subtree.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <div class="code-header">🔍 BST Search Implementation</div>
+                <div class="code-block">    <span class="keyword">public</span> <span class="method">BSTNode</span> <span class="method">search</span>(<span class="method">BSTNode</span> root, <span class="keyword">int</span> key) {
+        <span class="comment">// Base Cases: root is null or key is present at root</span>
+        <span class="keyword">if</span> (root == <span class="keyword">null</span> || root.data == key) {
+            <span class="keyword">return</span> root; <span class="comment">// Return the node if found, null otherwise</span>
+        }
+
+        <span class="comment">// Key is greater than root's data, search in right subtree</span>
+        <span class="keyword">if</span> (key > root.data) {
+            <span class="keyword">return</span> <span class="method">search</span>(root.right, key);
+        }
+
+        <span class="comment">// Key is smaller than root's data, search in left subtree</span>
+        <span class="keyword">return</span> <span class="method">search</span>(root.left, key);
+    }
+
+    <span class="comment">// --- Example Usage (main method for testing) ---</span>
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="method">BinarySearchTree</span> bst = <span class="keyword">new</span> <span class="method">BinarySearchTree</span>();
+        <span class="method">BSTNode</span> searchExampleRoot = <span class="keyword">null</span>;
+
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">50</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">30</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">20</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">40</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">70</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">60</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">80</span>);
+
+        System.out.println(<span class="string">"Searching in BST:"</span>);
+        <span class="keyword">int</span> keyToFind = <span class="number">40</span>;
+        <span class="method">BSTNode</span> nodeFound = bst.<span class="method">search</span>(searchExampleRoot, keyToFind);
+        <span class="keyword">if</span> (nodeFound != <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"Key "</span> + keyToFind + <span class="string">" found in BST."</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(<span class="string">"Key "</span> + keyToFind + <span class="string">" not found in BST."</span>);
+        }
+
+        keyToFind = <span class="number">90</span>;
+        nodeFound = bst.<span class="method">search</span>(searchExampleRoot, keyToFind);
+        <span class="keyword">if</span> (nodeFound != <span class="keyword">null</span>) {
+            System.out.println(<span class="string">"Key "</span> + keyToFind + <span class="string">" found in BST."</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(<span class="string">"Key "</span> + keyToFind + <span class="string">" not found in BST."</span>);
+        }
+        System.out.println(<span class="string">"\n"</span>);
+    }</div>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">E. Finding Minimum and Maximum</h3>
+            <div class="definition-box">
+                <p>Finding the minimum and maximum elements in a BST is very straightforward due to its ordered property.</p>
+                <ul>
+                    <li><strong>Finding Minimum:</strong> The minimum element in a BST is always the leftmost node in the tree (or subtree). You simply traverse left until you hit a node with no left child.</li>
+                    <li><strong>Finding Maximum:</strong> The maximum element in a BST is always the rightmost node in the tree (or subtree). You simply traverse right until you hit a node with no right child.</li>
+                </ul>
+            </div>
+            <div class="characteristics-list">
+                <h4>Algorithm (Min):</h4>
+                <ul>
+                    <li>Start from the root.</li>
+                    <li>While the current node's left child is not null, move to the left child.</li>
+                    <li>The current node is the minimum.</li>
+                </ul>
+                <h4>Algorithm (Max):</h4>
+                <ul>
+                    <li>Start from the root.</li>
+                    <li>While the current node's right child is not null, move to the right child.</li>
+                    <li>The current node is the maximum.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <div class="code-header">📊 BST Min/Max Finding Implementation</div>
+                <div class="code-block">    <span class="keyword">public</span> Integer <span class="method">findMin</span>(<span class="method">BSTNode</span> root) {
+        <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+            <span class="keyword">return null</span>; <span class="comment">// Or throw an IllegalArgumentException</span>
+        }
+        <span class="method">BSTNode</span> current = root;
+        <span class="keyword">while</span> (current.left != <span class="keyword">null</span>) {
+            current = current.left;
+        }
+        <span class="keyword">return</span> current.data;
+    }
+
+    <span class="keyword">public</span> Integer <span class="method">findMax</span>(<span class="method">BSTNode</span> root) {
+        <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+            <span class="keyword">return null</span>; <span class="comment">// Or throw an IllegalArgumentException</span>
+        }
+        <span class="method">BSTNode</span> current = root;
+        <span class="keyword">while</span> (current.right != <span class="keyword">null</span>) {
+            current = current.right;
+        }
+        <span class="keyword">return</span> current.data;
+    }
+
+    <span class="comment">// --- Example Usage (main method for testing) ---</span>
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="method">BinarySearchTree</span> bst = <span class="keyword">new</span> <span class="method">BinarySearchTree</span>();
+        <span class="method">BSTNode</span> searchExampleRoot = <span class="keyword">null</span>; <span class="comment">// Re-initialize for a clean example</span>
+
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">50</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">30</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">20</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">40</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">70</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">60</span>);
+        searchExampleRoot = bst.<span class="method">insert</span>(searchExampleRoot, <span class="number">80</span>);
+
+        System.out.println(<span class="string">"Finding Min/Max in BST:"</span>);
+        System.out.println(<span class="string">"Min element: "</span> + bst.<span class="method">findMin</span>(searchExampleRoot)); <span class="comment">// Expected: 20</span>
+        System.out.println(<span class="string">"Max element: "</span> + bst.<span class="method">findMax</span>(searchExampleRoot)); <span class="comment">// Expected: 80</span>
+
+        <span class="method">BSTNode</span> emptyBst = <span class="keyword">null</span>;
+        System.out.println(<span class="string">"Min element in empty BST: "</span> + bst.<span class="method">findMin</span>(emptyBst)); <span class="comment">// Expected: null</span>
+        System.out.println(<span class="string">"Max element in empty BST: "</span> + bst.<span class="method">findMax</span>(emptyBst)); <span class="comment">// Expected: null</span>
+        System.out.println(<span class="string">"\n"</span>);
+    }</div>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">F. Height of a Tree</h3>
+            <div class="definition-box">
+                <p>The height of a tree (or a node) is the length of the longest path from that node to a leaf. The height of a leaf node is 0. The height of an empty tree is typically -1.</p>
+            </div>
+            <div class="characteristics-list">
+                <h4>Algorithm (Recursive):</h4>
+                <ul>
+                    <li>If the root is null, return -1 (height of an empty tree).</li>
+                    <li>Recursively calculate the height of the left subtree (<code>leftHeight</code>).</li>
+                    <li>Recursively calculate the height of the right subtree (<code>rightHeight</code>).</li>
+                    <li>The height of the current node is <code>1 + max(leftHeight, rightHeight)</code>.</li>
+                </ul>
+            </div>
+            <div class="code-container">
+                <div class="code-header">📏 BST Height Calculation Implementation</div>
+                <div class="code-block">    <span class="keyword">public int</span> <span class="method">getHeight</span>(<span class="method">BSTNode</span> root) {
+        <span class="comment">// Base case: height of an empty tree is -1</span>
+        <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+            <span class="keyword">return</span> <span class="number">-1</span>;
+        }
+
+        <span class="comment">// Recursively calculate height of left and right subtrees</span>
+        <span class="keyword">int</span> leftHeight = <span class="method">getHeight</span>(root.left);
+        <span class="keyword">int</span> rightHeight = <span class="method">getHeight</span>(root.right);
+
+        <span class="comment">// Height of current node is 1 + maximum of its children's heights</span>
+        <span class="keyword">return</span> <span class="number">1</span> + Math.max(leftHeight, rightHeight);
+    }
+
+    <span class="comment">// --- Example Usage (main method for testing) ---</span>
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="method">BinarySearchTree</span> bst = <span class="keyword">new</span> <span class="method">BinarySearchTree</span>();
+        <span class="method">BSTNode</span> heightExampleRoot = <span class="keyword">null</span>; <span class="comment">// Re-initialize for a clean example</span>
+
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">50</span>);
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">30</span>);
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">70</span>);
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">20</span>);
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">40</span>);
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">60</span>);
+        heightExampleRoot = bst.<span class="method">insert</span>(heightExampleRoot, <span class="number">80</span>);
+
+        <span class="comment">// Tree structure:</span>
+        <span class="comment">//      50 (height 2)</span>
+        <span class="comment">//     /  \</span>
+        <span class="comment">//    30   70 (height 1)</span>
+        <span class="comment">//   / \  / \</span>
+        <span class="comment">//  20 40 60 80 (height 0 - leaves)</span>
+        System.out.println(<span class="string">"Calculating Tree Height:"</span>);
+        System.out.println(<span class="string">"Height of BST: "</span> + bst.<span class="method">getHeight</span>(heightExampleRoot)); <span class="comment">// Expected: 2</span>
+
+        <span class="comment">// For a single node tree:</span>
+        <span class="method">BSTNode</span> singleNodeTree = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">10</span>);
+        System.out.println(<span class="string">"Height of single node tree: "</span> + bst.<span class="method">getHeight</span>(singleNodeTree)); <span class="comment">// Expected: 0</span>
+
+        System.out.println(<span class="string">"Height of empty tree: "</span> + bst.<span class="method">getHeight</span>(<span class="keyword">null</span>)); <span class="comment">// Expected: -1</span>
+    }
+}</div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to Main Hub</a>
+    </div>
+
+    <script>
+        // Add smooth scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.subtype-card, .property-card, .tree-type');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateY(20px)';
+                        entry.target.style.transition = 'all 0.6s ease';
+                        
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+
+            // Interactive tree nodes
+            const treeNodes = document.querySelectorAll('.tree-node');
+            treeNodes.forEach(node => {
+                node.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                node.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

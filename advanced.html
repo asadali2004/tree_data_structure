@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Tree Concepts and Algorithms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .nav-breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .tree-type {
+            margin-bottom: 50px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .tree-type-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .characteristics-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .characteristics-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .characteristics-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list li strong {
+            color: #2c3e50;
+        }
+
+        .subtypes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .subtype-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .subtype-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .subtype-card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* New styles for code blocks */
+        .code-container {
+            background: #2c3e50; /* Dark background for the whole block */
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Ensures border-radius applies to children */
+        }
+
+        .code-header {
+            background: #34495e; /* Slightly lighter header for the code block */
+            color: #ecf0f1;
+            padding: 10px 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid #495e72;
+            display: flex;
+            align-items: center;
+        }
+
+        .code-header::before {
+            content: '💻'; /* Add a small icon */
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .code-block {
+            color: #ecf0f1;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre-wrap; /* Ensures long lines wrap */
+            word-wrap: break-word; /* Ensures very long words break */
+        }
+
+        /* Syntax Highlighting */
+        .code-block .keyword {
+            color: #8be9fd; /* Light blue for keywords */
+            font-weight: bold;
+        }
+
+        .code-block .method {
+            color: #f1fa8c; /* Yellow for method/class names */
+        }
+
+        .code-block .comment {
+            color: #6272a4; /* Grey for comments */
+        }
+
+        .code-block .string {
+            color: #f1fa8c; /* Green for strings */
+        }
+
+        .code-block .number {
+            color: #bd93f9; /* Purple for numbers */
+        }
+        /* End new styles for code blocks */
+
+        .visual-tree {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .tree-node {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            margin: 5px;
+            font-weight: bold;
+            min-width: 35px;
+            min-height: 35px;
+            line-height: 1.2;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .tree-level {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .tree-level::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: #667eea;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .property-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .property-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .property-name {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .property-value {
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .advantages-disadvantages {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .pros-cons-card {
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 4px solid;
+        }
+
+        .advantages-card {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-top-color: #28a745;
+        }
+
+        .disadvantages-card {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-top-color: #dc3545;
+        }
+
+        .pros-cons-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .advantages-card h4 {
+            color: #155724;
+        }
+
+        .disadvantages-card h4 {
+            color: #721c24;
+        }
+
+        .applications-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #ff9800;
+        }
+
+        .applications-section h4 {
+            color: #e65100;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .applications-section ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .applications-section li {
+            margin-bottom: 8px;
+        }
+
+        .formula-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .rotation-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .rotation-card {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #9c27b0;
+        }
+
+        .rotation-card h5 {
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+
+        .color-rules {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .color-rules h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .rule-item {
+            background: white;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #e74c3c;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .subtypes-grid,
+            .properties-grid,
+            .advantages-disadvantages {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Advanced Tree Concepts and Algorithms</h1>
+            <p class="subtitle">Exploring sophisticated tree problems and data structures</p>
+        </div>
+
+        <div class="nav-breadcrumb">
+            <a href="index.html">← Back to Tree Data Structures Hub</a>
+        </div>
+
+        <div class="tree-type">
+            <div class="tree-type-header">V. Advanced Tree Concepts and Algorithms</div>
+            
+            <div class="definition-box">
+                <p>This section covers more sophisticated tree-related problems and data structures, building upon the basic understanding.</p>
+            </div>
+
+            <h3 style="color: #2c3e50; margin: 30px 0 20px 0; font-size: 1.4rem;">A. Tree Representations (Adjacency List vs. Adjacency Matrix - Briefly for General Trees)</h3>
+            <div class="definition-box">
+                <p>While our focus has primarily been on binary trees, it's worth briefly touching upon how general trees (where nodes can have many children) can be represented, especially in contexts where they might be viewed as a type of graph.</p>
+            </div>
+
+            <div class="subtypes-grid">
+                <div class="subtype-card">
+                    <h4>Adjacency List</h4>
+                    <p><strong>Concept:</strong> For each node, maintain a list of its direct children. This is the most common and efficient way to represent trees in practice, especially when dealing with general trees or graphs with many nodes but relatively few edges (sparse graphs).</p>
+                    <div class="characteristics-list">
+                        <h4>Structure & Properties:</h4>
+                        <ul>
+                            <li><strong>Structure:</strong> An array or HashMap where each index/key corresponds to a node, and its value is a List of its children.</li>
+                            <li><strong>Advantages:</strong> Space-efficient for sparse trees/graphs ($O(V+E)$), efficient for finding all children of a node.</li>
+                            <li><strong>Disadvantages:</strong> Checking if an edge exists between two arbitrary nodes can take $O(\text{degree})$ time.</li>
+                        </ul>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">🔗 Adjacency List Representation (Java)</div>
+                        <div class="code-block"><span class="comment">// Example for a General Tree Node with Adjacency List representation</span>
+<span class="keyword">class</span> <span class="method">GeneralTreeNode</span> {
+    <span class="keyword">int</span> data;
+    List&lt;<span class="method">GeneralTreeNode</span>&gt; children;
+
+    <span class="keyword">public</span> <span class="method">GeneralTreeNode</span>(<span class="keyword">int</span> data) {
+        <span class="keyword">this</span>.data = data;
+        <span class="keyword">this</span>.children = <span class="keyword">new</span> ArrayList&lt;&gt;();
+    }
+
+    <span class="keyword">public void</span> <span class="method">addChild</span>(<span class="method">GeneralTreeNode</span> child) {
+        <span class="keyword">this</span>.children.<span class="method">add</span>(child);
+    }
+}
+
+<span class="comment">// Conceptual Adjacency List for a tree structure (e.g., in a HashMap)</span>
+<span class="comment">// Map&lt;Integer, List&lt;Integer&gt;&gt; adjList = new HashMap&lt;&gt;();</span>
+<span class="comment">// adjList.put(1, Arrays.asList(2, 3)); // Node 1 has children 2 and 3</span>
+<span class="comment">// adjList.put(2, Arrays.asList(4, 5)); // Node 2 has children 4 and 5</span>
+<span class="comment">// adjList.put(3, Arrays.asList(6));    // Node 3 has child 6</span></div>
+                    </div>
+                </div>
+
+                <div class="subtype-card">
+                    <h4>Adjacency Matrix</h4>
+                    <p><strong>Concept:</strong> A 2D array (matrix) where <code>matrix[i][j]</code> is 1 if there is an edge from node <code>i</code> to node <code>j</code>, and 0 otherwise. For trees, this is less common unless the tree is part of a larger graph problem.</p>
+                    <div class="characteristics-list">
+                        <h4>Structure & Properties:</h4>
+                        <ul>
+                            <li><strong>Structure:</strong> A V x V matrix, where V is the number of nodes.</li>
+                            <li><strong>Advantages:</strong> Fast for checking if an edge exists between two nodes ($O(1)$).</li>
+                            <li><strong>Disadvantages:</strong> Space-inefficient for sparse trees/graphs ($O(V^2)$), as most entries will be 0. Less intuitive for tree-specific operations like finding parents/children unless explicitly stored.</li>
+                        </ul>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header">🔢 Adjacency Matrix Representation (Conceptual)</div>
+                        <div class="code-block"><span class="comment">// Conceptual Adjacency Matrix for a tree (less common for pure trees)</span>
+<span class="comment">// int[][] adjMatrix = new int[numNodes + 1][numNodes + 1]; // numNodes = 6 for 1-6</span>
+<span class="comment">// adjMatrix[1][2] = 1; // Edge from 1 to 2</span>
+<span class="comment">// adjMatrix[1][3] = 1; // Edge from 1 to 3</span>
+<span class="comment">// adjMatrix[2][4] = 1; // Edge from 2 to 4</span>
+<span class="comment">// adjMatrix[2][5] = 1; // Edge from 2 to 5</span>
+<span class="comment">// adjMatrix[3][6] = 1; // Edge from 3 to 6</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="definition-box">
+                <p><strong>Note:</strong> For binary trees, the implicit representation using left and right pointers (as we've been using with <code>TreeNode</code> and <code>BSTNode</code>) is most common and efficient. Adjacency lists/matrices are more relevant when discussing general graphs or transforming a tree problem into a graph problem.</p>
+            </div>
+        </div>
+
+        <div class="tree-type">
+            <div class="tree-type-header">B. Lowest Common Ancestor (LCA)</div>
+            
+            <div class="definition-box">
+                <p>The Lowest Common Ancestor (LCA) of two nodes n1 and n2 in a tree is the lowest (deepest) node that has both n1 and n2 as descendants (where a node can be a descendant of itself).</p>
+                <p><strong>1. Concept:</strong> Find the shared ancestor that is farthest from the root.</p>
+            </div>
+
+            <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">2. Algorithm (for BSTs):</h4>
+            <div class="characteristics-list">
+                <ul>
+                    <li>Leverage the BST property:</li>
+                    <li>If both n1 and n2 are smaller than the current node, then the LCA must be in the left subtree.</li>
+                    <li>If both n1 and n2 are larger than the current node, then the LCA must be in the right subtree.</li>
+                    <li>If one is smaller and the other is larger (or one is equal to the current node), then the current node is the LCA.</li>
+                </ul>
+            </div>
+            <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">3. Code Example (Java - for BSTs):</h4>
+            <div class="code-container">
+                <div class="code-header">⬇️ LCA in BST (Java)</div>
+                <div class="code-block"><span class="comment">// Assuming BSTNode class is available</span>
+<span class="comment">// (from previous section)</span>
+
+<span class="keyword">public class</span> <span class="method">LCAinBST</span> {
+
+    <span class="keyword">public</span> <span class="method">BSTNode</span> <span class="method">lowestCommonAncestorBST</span>(<span class="method">BSTNode</span> root, <span class="keyword">int</span> n1, <span class="keyword">int</span> n2) {
+        <span class="comment">// Base case: If root is null, no LCA</span>
+        <span class="keyword">if</span> (root == <span class="keyword">null</span>) {
+            <span class="keyword">return null</span>;
+        }
+
+        <span class="comment">// If both n1 and n2 are smaller than root, LCA is in left subtree</span>
+        <span class="keyword">if</span> (n1 < root.data && n2 < root.data) {
+            <span class="keyword">return</span> <span class="method">lowestCommonAncestorBST</span>(root.left, n1, n2);
+        }
+
+        <span class="comment">// If both n1 and n2 are greater than root, LCA is in right subtree</span>
+        <span class="keyword">if</span> (n1 > root.data && n2 > root.data) {
+            <span class="keyword">return</span> <span class="method">lowestCommonAncestorBST</span>(root.right, n1, n2);
+        }
+
+        <span class="comment">// If one is smaller and one is greater, or one is equal to root,</span>
+        <span class="comment">// then root is the LCA.</span>
+        <span class="keyword">return</span> root;
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="comment">// Construct a sample BST</span>
+        <span class="comment">//      50</span>
+        <span class="comment">//     /  \</span>
+        <span class="comment">//    30   70</span>
+        <span class="comment">//   / \  / \</span>
+        <span class="comment">//  20 40 60 80</span>
+        <span class="method">BSTNode</span> root = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">50</span>);
+        root.left = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">30</span>);
+        root.right = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">70</span>);
+        root.left.left = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">20</span>);
+        root.left.right = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">40</span>);
+        root.right.left = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">60</span>);
+        root.right.right = <span class="keyword">new</span> <span class="method">BSTNode</span>(<span class="number">80</span>);
+
+        <span class="method">LCAinBST</span> lcaFinder = <span class="keyword">new</span> <span class="method">LCAinBST</span>();
+
+        <span class="comment">// Test cases</span>
+        System.out.println(<span class="string">"LCA of 20 and 40: "</span> + lcaFinder.<span class="method">lowestCommonAncestorBST</span>(root, <span class="number">20</span>, <span class="number">40</span>).data); <span class="comment">// Expected: 30</span>
+        System.out.println(<span class="string">"LCA of 60 and 80: "</span> + lcaFinder.<span class="method">lowestCommonAncestorBST</span>(root, <span class="number">60</span>, <span class="number">80</span>).data); <span class="comment">// Expected: 70</span>
+        System.out.println(<span class="string">"LCA of 20 and 80: "</span> + lcaFinder.<span class="method">lowestCommonAncestorBST</span>(root, <span class="number">20</span>, <span class="number">80</span>).data); <span class="comment">// Expected: 50</span>
+        System.out.println(<span class="string">"LCA of 30 and 20: "</span> + lcaFinder.<span class="method">lowestCommonAncestorBST</span>(root, <span class="number">30</span>, <span class="number">20</span>).data); <span class="comment">// Expected: 30</span>
+        System.out.println(<span class="string">"LCA of 50 and 80: "</span> + lcaFinder.<span class="method">lowestCommonAncestorBST</span>(root, <span class="number">50</span>, <span class="number">80</span>).data); <span class="comment">// Expected: 50</span>
+    }
+}</div>
+            </div>
+
+            <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">Algorithm (for General Binary Trees - not necessarily BSTs):</h4>
+            <div class="characteristics-list">
+                <p>This approach uses recursion and does not rely on the BST property.</p>
+                <h5>Base Cases:</h5>
+                <ul>
+                    <li>If root is null, return null.</li>
+                    <li>If root is n1 or root is n2, then root is the LCA (assuming both n1 and n2 are present in the tree).</li>
+                </ul>
+                <h5>Recursive Step:</h5>
+                <ul>
+                    <li>Recursively find LCA in the left subtree: <code>leftLCA = lowestCommonAncestor(root.left, n1, n2)</code>.</li>
+                    <li>Recursively find LCA in the right subtree: <code>rightLCA = lowestCommonAncestor(root.right, n1, n2)</code>.</li>
+                </ul>
+                <h5>Combine Results:</h5>
+                <ul>
+                    <li>If both <code>leftLCA</code> and <code>rightLCA</code> are non-null, it means n1 and n2 are in different subtrees of the current root. Therefore, root is the LCA.</li>
+                    <li>If only <code>leftLCA</code> is non-null, it means both n1 and n2 (or the LCA) are in the left subtree. So, <code>leftLCA</code> is the LCA.</li>
+                    <li>If only <code>rightLCA</code> is non-null, it means both n1 and n2 (or the LCA) are in the right subtree. So, <code>rightLCA</code> is the LCA.</li>
+                </ul>
+            </div>
+            <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">Code Example (Java - for General Binary Trees):</h4>
+            <div class="code-container">
+                <div class="code-header">🌲 LCA in General Binary Tree (Java)</div>
+                <div class="code-block"><span class="comment">// Assuming TreeNode class is available</span>
+<span class="comment">// (from Level Order Traversal section)</span>
+
+<span class="keyword">public class</span> <span class="method">LCAinGeneralTree</span> {
+
+    <span class="comment">// Note: This method assumes that n1 and n2 are present in the tree.</span>
+    <span class="comment">// If they might not be present, additional checks are needed.</span>
+    <span class="keyword">public</span> <span class="method">TreeNode</span> <span class="method">lowestCommonAncestor</span>(<span class="method">TreeNode</span> root, <span class="method">TreeNode</span> n1, <span class="method">TreeNode</span> n2) {
+        <span class="comment">// Base case 1: If root is null, or if root is one of the target nodes</span>
+        <span class="keyword">if</span> (root == <span class="keyword">null</span> || root == n1 || root == n2) {
+            <span class="keyword">return</span> root;
+        }
+
+        <span class="comment">// Recursively search in left and right subtrees</span>
+        <span class="method">TreeNode</span> leftLCA = <span class="method">lowestCommonAncestor</span>(root.left, n1, n2);
+        <span class="method">TreeNode</span> rightLCA = <span class="method">lowestCommonAncestor</span>(root.right, n1, n2);
+
+        <span class="comment">// If both leftLCA and rightLCA are non-null, it means n1 and n2 were found</span>
+        <span class="comment">// in different subtrees. So, the current root is their LCA.</span>
+        <span class="keyword">if</span> (leftLCA != <span class="keyword">null</span> && rightLCA != <span class="keyword">null</span>) {
+            <span class="keyword">return</span> root;
+        }
+
+        <span class="comment">// If only leftLCA is non-null, it means both n1 and n2 (or their LCA)</span>
+        <span class="comment">// are in the left subtree.</span>
+        <span class="keyword">if</span> (leftLCA != <span class="keyword">null</span>) {
+            <span class="keyword">return</span> leftLCA;
+        }
+        <span class="comment">// If only rightLCA is non-null, it means both n1 and n2 (or their LCA)</span>
+        <span class="comment">// are in the right subtree.</span>
+        <span class="keyword">else</span> {
+            <span class="keyword">return</span> rightLCA;
+        }
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="comment">// Construct a sample general binary tree</span>
+        <span class="comment">//      1</span>
+        <span class="comment">//     / \</span>
+        <span class="comment">//    2   3</span>
+        <span class="comment">//   / \   \</span>
+        <span class="comment">//  4   5   6</span>
+        <span class="comment">//     /</span>
+        <span class="comment">//    7</span>
+        <span class="method">TreeNode</span> root = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">1</span>);
+        root.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">2</span>);
+        root.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">3</span>);
+        root.left.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">4</span>);
+        <span class="method">TreeNode</span> node5 = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">5</span>);
+        root.left.right = node5;
+        root.right.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">6</span>);
+        <span class="method">TreeNode</span> node7 = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">7</span>);
+        node5.left = node7; <span class="comment">// 7 is a child of 5</span>
+
+        <span class="method">LCAinGeneralTree</span> lcaFinder = <span class="keyword">new</span> <span class="method">LCAinGeneralTree</span>();
+
+        <span class="comment">// Test cases</span>
+        System.out.println(<span class="string">"LCA of 4 and 5: "</span> + lcaFinder.<span class="method">lowestCommonAncestor</span>(root, root.left.left, root.left.right).data); <span class="comment">// Expected: 2</span>
+        System.out.println(<span class="string">"LCA of 4 and 6: "</span> + lcaFinder.<span class="method">lowestCommonAncestor</span>(root, root.left.left, root.right.right).data); <span class="comment">// Expected: 1</span>
+        System.out.println(<span class="string">"LCA of 7 and 6: "</span> + lcaFinder.<span class="method">lowestCommonAncestor</span>(root, node7, root.right.right).data); <span class="comment">// Expected: 1</span>
+        System.out.println(<span class="string">"LCA of 7 and 5: "</span> + lcaFinder.<span class="method">lowestCommonAncestor</span>(root, node7, node5).data); <span class="comment">// Expected: 5</span>
+    }
+}</div>
+            </div>
+        </div>
+
+        <div class="tree-type">
+            <div class="tree-type-header">C. Building Trees from Traversals (Inorder + Preorder/Postorder)</div>
+            
+            <div class="definition-box">
+                <p>It is often possible to uniquely reconstruct a binary tree if you are given two of its traversal sequences.</p>
+                <p><strong>1. Concept:</strong></p>
+                <ul>
+                    <li>Given Inorder Traversal and Preorder Traversal, a unique binary tree can be constructed.</li>
+                    <li>Given Inorder Traversal and Postorder Traversal, a unique binary tree can be constructed.</li>
+                    <li>Cannot construct a unique tree from just Preorder and Postorder (e.g., a tree with root A, left child B, right child C has the same pre/post order as a tree with root A, left child C, right child B - if no values are distinct or ordering is unknown).</li>
+                </ul>
+            </div>
+
+            <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">2. Algorithm (Inorder + Preorder):</h4>
+            <div class="characteristics-list">
+                <ul>
+                    <li>The first element in Preorder traversal is always the root of the current subtree.</li>
+                    <li>Find this root element in the Inorder traversal.</li>
+                    <li>All elements to the left of the root in Inorder traversal belong to the left subtree.</li>
+                    <li>All elements to the right of the root in Inorder traversal belong to the right subtree.</li>
+                    <li>Recursively apply steps 1-4 to build the left and right subtrees using their respective portions of Preorder and Inorder arrays.</li>
+                </ul>
+            </div>
+            <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">3. Code Example (Java - Inorder + Preorder):</h4>
+            <div class="code-container">
+                <div class="code-header">🏗️ Build Tree from Inorder + Preorder (Java)</div>
+                <div class="code-block"><span class="keyword">import</span> java.util.HashMap;
+<span class="keyword">import</span> java.util.Map;
+
+<span class="keyword">public class</span> <span class="method">BuildTreeFromTraversals</span> {
+
+    <span class="comment">// Assuming TreeNode class is available</span>
+    <span class="comment">// static class TreeNode {</span>
+    <span class="comment">//    int data;</span>
+    <span class="comment">//    TreeNode left;</span>
+    <span class="comment">//    TreeNode right;</span>
+    <span class="comment">//    public TreeNode(int data) {</span>
+    <span class="comment">//        this.data = data;</span>
+    <span class="comment">//        this.left = null;</span>
+    <span class="comment">//        this.right = null;</span>
+    <span class="comment">//    }</span>
+    <span class="comment">// }</span>
+
+    <span class="keyword">private</span> Map&lt;Integer, Integer&gt; inorderMap; <span class="comment">// To quickly find index of root in inorder[]</span>
+
+    <span class="keyword">public</span> <span class="method">TreeNode</span> <span class="method">buildTree</span>(<span class="keyword">int</span>[] preorder, <span class="keyword">int</span>[] inorder) {
+        inorderMap = <span class="keyword">new</span> HashMap&lt;&gt;();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < inorder.length; i++) {
+            inorderMap.<span class="method">put</span>(inorder[i], i);
+        }
+
+        <span class="comment">// Call recursive helper function</span>
+        <span class="keyword">return</span> <span class="method">buildTreeHelper</span>(preorder, <span class="number">0</span>, preorder.length - <span class="number">1</span>, inorder, <span class="number">0</span>, inorder.length - <span class="number">1</span>);
+    }
+
+    <span class="keyword">private</span> <span class="method">TreeNode</span> <span class="method">buildTreeHelper</span>(<span class="keyword">int</span>[] preorder, <span class="keyword">int</span> preStart, <span class="keyword">int</span> preEnd,
+                                     <span class="keyword">int</span>[] inorder, <span class="keyword">int</span> inStart, <span class="keyword">int</span> inEnd) {
+        <span class="comment">// Base case: If the range is invalid or empty</span>
+        <span class="keyword">if</span> (preStart > preEnd || inStart > inEnd) {
+            <span class="keyword">return null</span>;
+        }
+
+        <span class="comment">// The first element in preorder is the root</span>
+        <span class="keyword">int</span> rootVal = preorder[preStart];
+        <span class="method">TreeNode</span> root = <span class="keyword">new</span> <span class="method">TreeNode</span>(rootVal);
+
+        <span class="comment">// Find the root's index in inorder traversal</span>
+        <span class="keyword">int</span> inRootIndex = inorderMap.<span class="method">get</span>(rootVal);
+
+        <span class="comment">// Calculate size of left subtree</span>
+        <span class="keyword">int</span> numsLeft = inRootIndex - inStart;
+
+        <span class="comment">// Recursively build left subtree</span>
+        root.left = <span class="method">buildTreeHelper</span>(preorder, preStart + <span class="number">1</span>, preStart + numsLeft,
+                                     inorder, inStart, inRootIndex - <span class="number">1</span>);
+
+        <span class="comment">// Recursively build right subtree</span>
+        root.right = <span class="method">buildTreeHelper</span>(preorder, preStart + numsLeft + <span class="number">1</span>, preEnd,
+                                      inorder, inRootIndex + <span class="number">1</span>, inEnd);
+
+        <span class="keyword">return</span> root;
+    }
+
+    <span class="comment">// Helper to print tree in-order to verify reconstruction</span>
+    <span class="keyword">public void</span> <span class="method">printInorder</span>(<span class="method">TreeNode</span> node) {
+        <span class="keyword">if</span> (node == <span class="keyword">null</span>) <span class="keyword">return</span>;
+        <span class="method">printInorder</span>(node.left);
+        System.out.print(node.data + <span class="string">" "</span>);
+        <span class="method">printInorder</span>(node.right);
+    }
+
+    <span class="comment">// Helper to print tree preorder to verify reconstruction</span>
+    <span class="keyword">public void</span> <span class="method">printPreorder</span>(<span class="method">TreeNode</span> node) {
+        <span class="keyword">if</span> (node == <span class="keyword">null</span>) <span class="keyword">return</span>;
+        System.out.print(node.data + <span class="string">" "</span>);
+        <span class="method">printPreorder</span>(node.left);
+        <span class="method">printPreorder</span>(node.right);
+    }
+
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="comment">// Example:</span>
+        <span class="comment">// Tree:       1</span>
+        <span class="comment">//           / \</span>
+        <span class="comment">//          2   3</span>
+        <span class="comment">//         / \</span>
+        <span class="comment">//        4   5</span>
+        <span class="keyword">int</span>[] preorder = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>};
+        <span class="keyword">int</span>[] inorder = {<span class="number">4</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">3</span>};
+
+        <span class="method">BuildTreeFromTraversals</span> builder = <span class="keyword">new</span> <span class="method">BuildTreeFromTraversals</span>();
+        <span class="method">TreeNode</span> reconstructedRoot = builder.<span class="method">buildTree</span>(preorder, inorder);
+
+        System.out.println(<span class="string">"Reconstructed Tree Inorder (should be 4 2 5 1 3):"</span>);
+        builder.<span class="method">printInorder</span>(reconstructedRoot);
+        System.out.println(<span class="string">"\n"</span>);
+
+        System.out.println(<span class="string">"Reconstructed Tree Preorder (should be 1 2 4 5 3):"</span>);
+        builder.<span class="method">printPreorder</span>(reconstructedRoot);
+        System.out.println(<span class="string">"\n"</span>);
+
+        <span class="comment">// Another example for a BST type tree</span>
+        <span class="comment">//      50</span>
+        <span class="comment">//     /  \</span>
+        <span class="comment">//    30   70</span>
+        <span class="comment">//   / \  / \</span>
+        <span class="comment">//  20 40 60 80</span>
+        <span class="keyword">int</span>[] preorder2 = {<span class="number">50</span>, <span class="number">30</span>, <span class="number">20</span>, <span class="number">40</span>, <span class="number">70</span>, <span class="number">60</span>, <span class="number">80</span>};
+        <span class="keyword">int</span>[] inorder2 = {<span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>, <span class="number">70</span>, <span class="number">80</span>};
+
+        <span class="method">TreeNode</span> reconstructedRoot2 = builder.<span class="method">buildTree</span>(preorder2, inorder2);
+        System.out.println(<span class="string">"Reconstructed BST Inorder (should be 20 30 40 50 60 70 80):"</span>);
+        builder.<span class="method">printInorder</span>(reconstructedRoot2);
+        System.out.println(<span class="string">"\n"</span>);
+    }
+}</div>
+            </div>
+
+            <div class="tree-type">
+                <div class="tree-type-header">D. Tree Isomorphism</div>
+                
+                <div class="definition-box">
+                    <p><strong>1. Concept:</strong> Two binary trees are considered isomorphic if one can be transformed into the other by swapping left and right children of some (or none) of the nodes. This means they have the same shape, even if the values in corresponding nodes are different.</p>
+                    <p>Think of it as having the same "structural blueprint".</p>
+                </div>
+
+                <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">2. Algorithm:</h4>
+                <div class="characteristics-list">
+                    <h5>Base Cases:</h5>
+                    <ul>
+                        <li>If both trees are null, they are isomorphic.</li>
+                        <li>If only one tree is null, they are not isomorphic.</li>
+                        <li>If the data in the current nodes is different, they are not isomorphic (for strict isomorphism where data must match, or for problems where data is relevant to identity). For pure structural isomorphism, you might ignore data. Here, we'll assume data is relevant for "matching" nodes.</li>
+                    </ul>
+                    <h5>Recursive Step:</h5>
+                    <p>Two trees T1 and T2 are isomorphic if:</p>
+                    <ul>
+                        <li>Their roots have the same data (if data matters).</li>
+                        <li>One of the following two conditions holds:
+                            <ul>
+                                <li><code>T1.left</code> is isomorphic to <code>T2.left</code> AND <code>T1.right</code> is isomorphic to <code>T2.right</code> (no swap needed)</li>
+                                <li>OR</li>
+                                <li><code>T1.left</code> is isomorphic to <code>T2.right</code> AND <code>T1.right</code> is isomorphic to <code>T2.left</code> (a swap is performed at this node).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">Code Example (Java):</h4>
+                <div class="code-container">
+                    <div class="code-header">🧩 Tree Isomorphism Check (Java)</div>
+                    <div class="code-block"><span class="comment">// Assuming TreeNode class is available</span>
+
+<span class="keyword">public class</span> <span class="method">TreeIsomorphism</span> {
+
+    <span class="keyword">public boolean</span> <span class="method">isIsomorphic</span>(<span class="method">TreeNode</span> t1, <span class="method">TreeNode</span> t2) {
+        <span class="comment">// Base case 1: Both are null, so they are isomorphic</span>
+        <span class="keyword">if</span> (t1 == <span class="keyword">null</span> && t2 == <span class="keyword">null</span>) {
+            <span class="keyword">return true</span>;
+        }
+
+        <span class="comment">// Base case 2: One is null, the other is not. Not isomorphic.</span>
+        <span class="comment">// Or if data must match, check t1.data != t2.data here.</span>
+        <span class="comment">// For pure structural isomorphism, data check is omitted.</span>
+        <span class="keyword">if</span> (t1 == <span class="keyword">null</span> || t2 == <span class="keyword">null</span> || t1.data != t2.data) {
+            <span class="keyword">return false</span>;
+        }
+
+        <span class="comment">// Option 1: No swapping of children</span>
+        <span class="comment">// Left child of t1 matches left child of t2 AND</span>
+        <span class="comment">// Right child of t1 matches right child of t2</span>
+        <span class="keyword">boolean</span> case1 = <span class="method">isIsomorphic</span>(t1.left, t2.left) &&
+                                 <span class="method">isIsomorphic</span>(t1.right, t2.right);
+
+        <span class="comment">// Option 2: Swapping of children</span>
+        <span class="comment">// Left child of t1 matches right child of t2 AND</span>
+        <span class="comment">// Right child of t1 matches left child of t2</span>
+        <span class="keyword">boolean</span> case2 = <span class="method">isIsomorphic</span>(t1.left, t2.right) &&
+                                 <span class="method">isIsomorphic</span>(t1.right, t2.left);
+
+        <span class="keyword">return</span> case1 || case2;
+    }
+
+    <span class="keyword">public static void</span> <span class="method">main</span>(String[] args) {
+        <span class="comment">// Tree 1:</span>
+        <span class="comment">//       1</span>
+        <span class="comment">//      / \</span>
+        <span class="comment">//     2   3</span>
+        <span class="comment">//    / \</span>
+        <span class="comment">//   4   5</span>
+        <span class="method">TreeNode</span> t1 = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">1</span>);
+        t1.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">2</span>);
+        t1.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">3</span>);
+        t1.left.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">4</span>);
+        t1.left.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">5</span>);
+
+        <span class="comment">// Tree 2 (isomorphic to T1 by swapping children of node 2):</span>
+        <span class="comment">//       1</span>
+        <span class="comment">//      / \</span>
+        <span class="comment">//     2   3</span>
+        <span class="comment">//    / \</span>
+        <span class="comment">//   5   4</span>
+        <span class="method">TreeNode</span> t2 = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">1</span>);
+        t2.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">2</span>);
+        t2.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">3</span>);
+        t2.left.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">5</span>); <span class="comment">// Swapped</span>
+        t2.left.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">4</span>); <span class="comment">// Swapped</span>
+
+        <span class="comment">// Tree 3 (not isomorphic, different structure):</span>
+        <span class="comment">//       1</span>
+        <span class="comment">//      / \</span>
+        <span class="comment">//     2   3</span>
+        <span class="comment">//    /</span>
+        <span class="comment">//   4</span>
+        <span class="method">TreeNode</span> t3 = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">1</span>);
+        t3.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">2</span>);
+        t3.right = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">3</span>);
+        t3.left.left = <span class="keyword">new</span> <span class="method">TreeNode</span>(<span class="number">4</span>);
+
+
+        <span class="method">TreeIsomorphism</span> checker = <span class="keyword">new</span> <span class="method">TreeIsomorphism</span>();
+
+        System.out.println(<span class="string">"T1 and T2 are isomorphic: "</span> + checker.<span class="method">isIsomorphic</span>(t1, t2)); <span class="comment">// Expected: true</span>
+        System.out.println(<span class="string">"T1 and T3 are isomorphic: "</span> + checker.<span class="method">isIsomorphic</span>(t1, t3)); <span class="comment">// Expected: false</span>
+    }
+}</div>
+                </div>
+            </div>
+
+            <div class="tree-type">
+                <div class="tree-type-header">E. Segment Trees (Brief Overview for Range Queries)</div>
+                
+                <div class="definition-box">
+                    <p><strong>1. Concept:</strong> A Segment Tree is a tree data structure used for storing information about intervals or segments. It allows for efficient querying over ranges (e.g., sum, minimum, maximum within a range) and efficient updating of elements. Each node in the segment tree represents an interval, and its children represent sub-intervals.</p>
+                </div>
+                <div class="applications-section">
+                    <h4>2. Applications:</h4>
+                    <ul>
+                        <li>Range Minimum/Maximum/Sum Queries.</li>
+                        <li>Range updates (e.g., add a value to all elements in a range).</li>
+                        <li>Used in competitive programming for problems requiring quick range operations.</li>
+                    </ul>
+                </div>
+                <div class="characteristics-list">
+                    <h4>Key Idea:</h4>
+                    <p>It recursively divides an array into halves and stores information about each segment. Leaf nodes represent individual array elements. Internal nodes represent the aggregation (sum, min, max, etc.) of their children's segments.</p>
+                    <ul>
+                        <li><strong>Time Complexity:</strong> Both query and update operations take $O(\log N)$ time, where N is the size of the array.</li>
+                        <li><strong>Space Complexity:</strong> $O(N)$ (typically 2N or 4N depending on implementation, for an array-based representation).</li>
+                    </ul>
+                </div>
+                <div class="visual-tree" style="text-align: left;">
+                    <h4 style="margin-bottom: 15px;">Conceptual Example:</h4>
+                    <p>Original Array: [1, 3, 5, 7, 9, 11]</p>
+                    <p>A segment tree for sum queries would look like:</p>
+                    <pre style="background: #eee; padding: 10px; border-radius: 5px; overflow-x: auto;">
+                  [1,11] (sum 36)
+                 /        \
+            [1,5] (sum 18)   [7,11] (sum 18)
+           /    \         /        \
+        [1,3](4) [5](5) [7,9](16)   [11](11)
+       /  \
+     [1](1) [3](3)</pre>
+                    <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">(This is a simplified visual. In array representation, it's typically a complete binary tree).</p>
+                </div>
+            </div>
+
+            <div class="tree-type">
+                <div class="tree-type-header">F. Fenwick Trees (Binary Indexed Trees - Brief Overview)</div>
+                
+                <div class="definition-box">
+                    <p><strong>1. Concept:</strong> A Fenwick Tree (also known as a Binary Indexed Tree or BIT) is a data structure that can efficiently update elements and calculate prefix sums in a table of numbers. It is more compact and typically simpler to implement than a Segment Tree for certain operations.</p>
+                </div>
+                <div class="applications-section">
+                    <h4>2. Applications:</h4>
+                    <ul>
+                        <li>Calculating prefix sums (sum of elements from index 0 to i).</li>
+                        <li>Single element updates.</li>
+                        <li>Range sum queries (by sum(j) - sum(i-1)).</li>
+                        <li>Used in competitive programming for similar problems as Segment Trees, but generally limited to operations that can be inverted (like sum).</li>
+                    </ul>
+                </div>
+                <div class="characteristics-list">
+                    <h4>Key Idea:</h4>
+                    <p>It uses binary representation of indices to efficiently determine which array elements to update or query. It exploits the bitwise representation of numbers.</p>
+                    <ul>
+                        <li><strong>Time Complexity:</strong> Both update and query operations take $O(\log N)$ time.</li>
+                        <li><strong>Space Complexity:</strong> $O(N)$.</li>
+                    </ul>
+                </div>
+                <div class="visual-tree" style="text-align: left;">
+                    <h4 style="margin-bottom: 15px;">Conceptual Example (Array representation):</h4>
+                    <p><code>BIT[i]</code> stores the sum of a certain range of elements. The range depends on the lowest set bit of i.</p>
+                    <ul>
+                        <li><code>BIT[8]</code> stores arr[1]...arr[8]</li>
+                        <li><code>BIT[4]</code> stores arr[1]...arr[4]</li>
+                        <li><code>BIT[6]</code> stores arr[5]...arr[6]</li>
+                        <li><code>BIT[7]</code> stores arr[7]</li>
+                    </ul>
+                </div>
+                <div class="definition-box">
+                    <p>These advanced tree concepts highlight the versatility and power of tree data structures in solving complex computational problems.</p>
+                </div>
+            </div>
+
+            <a href="index.html" class="back-button">← Back to Main Hub</a>
+        </div>
+
+        <script>
+            // Add smooth scroll animations
+            document.addEventListener('DOMContentLoaded', function() {
+                const cards = document.querySelectorAll('.subtype-card, .property-card, .tree-type');
+                
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '0';
+                            entry.target.style.transform = 'translateY(20px)';
+                            entry.target.style.transition = 'all 0.6s ease';
+                            
+                            setTimeout(() => {
+                                entry.target.style.opacity = '1';
+                                entry.target.style.transform = 'translateY(0)';
+                            }, 100);
+                        }
+                    });
+                }, observerOptions);
+
+                cards.forEach(card => {
+                    observer.observe(card);
+                });
+
+                // Interactive tree nodes
+                const treeNodes = document.querySelectorAll('.tree-node');
+                treeNodes.forEach(node => {
+                    node.addEventListener('mouseenter', function() {
+                        this.style.transform = 'scale(1.1)';
+                        this.style.transition = 'transform 0.2s ease';
+                    });
+                    
+                    node.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                    });
+                });
+            });
+        </script>
+    </body>
+    </html>

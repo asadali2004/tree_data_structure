@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Data Structures - Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .topic-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .topic-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .topic-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .topic-title {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .topic-description {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .topic-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .topic-btn:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .topic-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .footer p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 25px;
+            }
+            
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌳 Tree Data Structures</h1>
+            <p>Master the fundamentals of tree data structures through comprehensive lessons, algorithms, and practical applications</p>
+        </div>
+
+        <div class="topics-grid">
+            <div class="topic-card">
+                <div class="topic-number">I</div>
+                <h3 class="topic-title">Introduction to Trees</h3>
+                <p class="topic-description">Learn what tree data structures are, their importance, and basic terminology like root, nodes, leaves, and tree properties.</p>
+                <button class="topic-btn" onclick="navigateToPage('introduction.html')">Start Learning</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">II</div>
+                <h3 class="topic-title">Types of Trees</h3>
+                <p class="topic-description">Explore different tree types including binary trees, BSTs, heaps, AVL trees, red-black trees, B-trees, and tries.</p>
+                <button class="topic-btn" onclick="navigateToPage('types.html')">Explore Types</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">III</div>
+                <h3 class="topic-title">Tree Traversal Techniques</h3>
+                <p class="topic-description">Master BFS and DFS traversal methods including inorder, preorder, and postorder with code examples.</p>
+                <button class="topic-btn" onclick="navigateToPage('traversal.html')">Learn Traversal</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">IV</div>
+                <h3 class="topic-title">Basic Tree Operations</h3>
+                <p class="topic-description">Implement fundamental operations like insertion, deletion, search, and finding min/max in binary search trees.</p>
+                <button class="topic-btn" onclick="navigateToPage('operations.html')">Practice Operations</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">V</div>
+                <h3 class="topic-title">Advanced Tree Concepts</h3>
+                <p class="topic-description">Dive into advanced topics like LCA, tree construction from traversals, segment trees, and Fenwick trees.</p>
+                <button class="topic-btn" onclick="navigateToPage('advanced.html')">Advanced Topics</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">VI</div>
+                <h3 class="topic-title">Applications of Trees</h3>
+                <p class="topic-description">Discover real-world applications in file systems, databases, compilers, networking, and game AI.</p>
+                <button class="topic-btn" onclick="navigateToPage('applications.html')">See Applications</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">VII</div>
+                <h3 class="topic-title">Complexity Analysis</h3>
+                <p class="topic-description">Understand time and space complexity for various tree operations and learn optimization techniques.</p>
+                <button class="topic-btn" onclick="navigateToPage('complexity.html')">Analyze Complexity</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">VIII</div>
+                <h3 class="topic-title">Best Practices & Pitfalls</h3>
+                <p class="topic-description">Learn common pitfalls, best practices for handling null pointers, recursion limits, and performance optimization.</p>
+                <button class="topic-btn" onclick="navigateToPage('best-practices.html')">Best Practices</button>
+            </div>
+
+            <div class="topic-card">
+                <div class="topic-number">IX</div>
+                <h3 class="topic-title">Conclusion & Resources</h3>
+                <p class="topic-description">Summary of key concepts and further learning resources to continue your tree data structures journey.</p>
+                <button class="topic-btn" onclick="navigateToPage('conclusion.html')">Wrap Up</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🚀 Ready to master tree data structures? Click on any topic above to begin your learning journey!</p>
+        </div>
+    </div>
+
+    <script>
+        function navigateToPage(pageUrl) {
+            // Add a smooth transition effect before navigation
+            const clickedCard = event.target.closest('.topic-card');
+            if (clickedCard) {
+                clickedCard.style.transform = 'scale(0.95)';
+                clickedCard.style.transition = 'transform 0.2s ease';
+                
+                setTimeout(() => {
+                    window.location.href = pageUrl;
+                }, 150);
+            } else {
+                window.location.href = pageUrl;
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.topic-card');
+            
+            cards.forEach((card, index) => {
+                // Add staggered animation on load
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

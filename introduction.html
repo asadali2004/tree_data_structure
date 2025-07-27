@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Trees - Tree Data Structures</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .nav-breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-content {
+            padding: 0 10px;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 5px solid #2196f3;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .characteristics-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .characteristics-list h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .characteristics-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .characteristics-list li {
+            background: white;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .characteristics-list li strong {
+            color: #2c3e50;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .application-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .application-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .application-card ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+
+        .terminology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .term-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .term-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .term-name {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .term-definition {
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .example-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid #ff9800;
+        }
+
+        .example-section h3 {
+            color: #e65100;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .tree-diagram {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 15px auto; /* Center the diagram */
+            max-width: 600px; /* Limit width for better visual */
+            text-align: left; /* Align ASCII art to left */
+            white-space: pre; /* Preserve whitespace for ASCII art */
+        }
+
+        .example-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .detail-item strong {
+            color: #e65100;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .applications-grid,
+            .terminology-grid,
+            .example-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌳 Introduction to Trees</h1>
+            <p class="subtitle">Understanding the fundamentals of tree data structures</p>
+        </div>
+
+        <div class="nav-breadcrumb">
+            <a href="index.html">← Back to Tree Data Structures Hub</a>
+        </div>
+
+        <div class="section">
+            <div class="section-header">A. What is a Tree Data Structure?</div>
+            <div class="section-content">
+                <div class="definition-box">
+                    <p><strong>A Tree is a non-linear hierarchical data structure</strong> that consists of nodes connected by edges. It simulates a hierarchical tree structure with a root value and subtrees of children with a parent node, represented as a set of linked nodes. Unlike real trees, the tree data structure is typically drawn upside down with the root at the top and the leaves at the bottom.</p>
+                </div>
+
+                <div class="characteristics-list">
+                    <h4>Key Characteristics:</h4>
+                    <ul>
+                        <li><strong>Hierarchical:</strong> Data is organized in a parent-child relationship.</li>
+                        <li><strong>Non-linear:</strong> Elements are not stored sequentially.</li>
+                        <li><strong>Connected:</strong> All nodes are connected, forming a single connected component.</li>
+                        <li><strong>No Cycles:</strong> A tree is an acyclic graph, meaning there are no loops or cycles.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">B. Why are Trees Important? (Applications)</div>
+            <div class="section-content">
+                <p>Trees are fundamental data structures with a wide range of applications due to their efficient organization and retrieval capabilities:</p>
+
+                <div class="applications-grid">
+                    <div class="application-card">
+                        <h4>📁 Hierarchical Data Representation</h4>
+                        <ul>
+                            <li><strong>File Systems:</strong> Directories and files on a computer are organized in a tree-like structure.</li>
+                            <li><strong>Organizational Charts:</strong> Represent the hierarchy within a company.</li>
+                            <li><strong>XML/JSON Parsers:</strong> Represent the structure of documents.</li>
+                        </ul>
+                    </div>
+
+                    <div class="application-card">
+                        <h4>🔍 Efficient Searching and Sorting</h4>
+                        <ul>
+                            <li><strong>Binary Search Trees (BSTs):</strong> Allow for efficient searching, insertion, and deletion of elements (O(log n) on average).</li>
+                            <li><strong>Heaps:</strong> Used in priority queues and heap sort algorithms.</li>
+                        </ul>
+                    </div>
+
+                    <div class="application-card">
+                        <h4>🗄️ Database Indexing</h4>
+                        <ul>
+                            <li><strong>B-Trees and B+ Trees:</strong> Commonly used in databases (e.g., MySQL, PostgreSQL) for efficient disk-based data retrieval.</li>
+                        </ul>
+                    </div>
+
+                    <div class="application-card">
+                        <h4>🌐 Networking</h4>
+                        <ul>
+                            <li><strong>Routing Algorithms:</strong> Spanning Tree Protocol (STP) in network bridges to prevent loops.</li>
+                        </ul>
+                    </div>
+
+                    <div class="application-card">
+                        <h4>⚙️ Compilers</h4>
+                        <ul>
+                            <li><strong>Parse Trees (Syntax Trees):</strong> Represent the grammatical structure of source code during compilation.</li>
+                        </ul>
+                    </div>
+
+                    <div class="application-card">
+                        <h4>🤖 Artificial Intelligence</h4>
+                        <ul>
+                            <li><strong>Decision Trees:</strong> Used in machine learning for classification and regression tasks.</li>
+                            <li><strong>Game AI:</strong> Representing possible moves and game states (e.g., minimax algorithm).</li>
+                        </ul>
+                    </div>
+
+                    <div class="application-card">
+                        <h4>🗜️ Data Compression</h4>
+                        <ul>
+                            <li><strong>Huffman Coding:</strong> Uses a Huffman tree to generate variable-length codes for characters, enabling efficient data compression.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">C. Basic Tree Terminology</div>
+            <div class="section-content">
+                <p>To understand trees, it's crucial to be familiar with the following terms:</p>
+
+                <div class="terminology-grid">
+                    <div class="term-card">
+                        <div class="term-name">Node</div>
+                        <div class="term-definition">A fundamental unit of a tree, containing data and links/references to its child nodes.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Root</div>
+                        <div class="term-definition">The topmost node in a tree. It has no parent. Every tree has exactly one root node.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Edge</div>
+                        <div class="term-definition">The link or connection between two nodes.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Parent</div>
+                        <div class="term-definition">A node that has one or more child nodes.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Child</div>
+                        <div class="term-definition">A node that has a parent node.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Sibling</div>
+                        <div class="term-definition">Nodes that share the same parent.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Leaf (External Node)</div>
+                        <div class="term-definition">A node that has no children. These are the nodes at the bottom of the tree.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Internal Node</div>
+                        <div class="term-definition">A node that has at least one child. (All nodes except leaf nodes).</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Path</div>
+                        <div class="term-definition">A sequence of connected nodes from one node to another. The length of a path is the number of edges on the path.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Depth of a Node</div>
+                        <div class="term-definition">The length of the path from the root to that node. The root node has a depth of 0.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Height of a Node</div>
+                        <div class="term-definition">The length of the longest path from that node to a leaf node in its subtree. The height of a leaf node is 0.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Height of a Tree</div>
+                        <div class="term-definition">The height of its root node. Alternatively, it's the maximum depth of any node in the tree.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Level of a Node</div>
+                        <div class="term-definition">The depth of the node plus one. If root is at depth 0, it's level 1.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Subtree</div>
+                        <div class="term-definition">A tree formed by a node and all of its descendants. Any node in a tree can be considered the root of a subtree.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Degree of a Node</div>
+                        <div class="term-definition">The number of children a node has.</div>
+                    </div>
+
+                    <div class="term-card">
+                        <div class="term-name">Forest</div>
+                        <div class="term-definition">A collection of disjoint trees.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="example-section">
+            <h3>📊 Example Illustration</h3>
+            
+            <div class="tree-diagram">
+          A (Root, Depth 0, Height 3)
+         / \
+        B   C (Siblings, Depth 1)
+       / \   \
+      D   E   F (D, E, F are children of B, C respectively, Depth 2)
+     /     \
+    G       H (G, H are leaves, Depth 3, Height 0)
+            </div>
+
+            <div class="example-details">
+                <div class="detail-item">
+                    <strong>Root:</strong> A
+                </div>
+                <div class="detail-item">
+                    <strong>Parents:</strong> A (of B, C), B (of D, E), C (of F)
+                </div>
+                <div class="detail-item">
+                    <strong>Children:</strong> B, C (of A); D, E (of B); F (of C); G (of D); H (of E)
+                </div>
+                <div class="detail-item">
+                    <strong>Siblings:</strong> B and C
+                </div>
+                <div class="detail-item">
+                    <strong>Leaves:</strong> G, H, F
+                </div>
+                <div class="detail-item">
+                    <strong>Internal Nodes:</strong> A, B, C, D, E
+                </div>
+                <div class="detail-item">
+                    <strong>Path from A to G:</strong> A &rarr; B &rarr; D &rarr; G (Length = 3)
+                </div>
+                <div class="detail-item">
+                    <strong>Depth of D:</strong> 2
+                </div>
+                <div class="detail-item">
+                    <strong>Height of D:</strong> 1 (longest path from D to its leaf G is D&rarr;G)
+                </div>
+                <div class="detail-item">
+                    <strong>Height of Tree:</strong> 3 (Height of A, longest path is A&rarr;B&rarr;D&rarr;G or A&rarr;B&rarr;E&rarr;H)
+                </div>
+                <div class="detail-item">
+                    <strong>Subtree rooted at B:</strong> Consists of nodes B, D, E, G, H.
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-button">← Back to Main Hub</a>
+    </div>
+
+    <script>
+        // Add smooth scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.term-card, .application-card');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '0';
+                        entry.target.style.transform = 'translateY(20px)';
+                        entry.target.style.transition = 'all 0.6s ease';
+                        
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, 100);
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
